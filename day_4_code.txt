@@ -1,0 +1,96 @@
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
+bool isFullOverlap ( string elfPair ) {
+    // Elf Pair Format
+    //   #-#,#-#
+    //   | | | |
+    //   | | | elf2End
+    //   | | elf2Start
+    //   | elf1End
+    //   elf1Start
+    
+    int elfPairArray[4]{};  // For seperating range numbers
+    int arrayPosition{};    // ^
+    
+    for ( auto it = elfPair.begin(); it != elfPair.end(); it++ ) {  // Read each char
+        if ( *it >= '0' && *it <= '9' ) {                           //   If current char is a number
+            elfPairArray[arrayPosition] *= 10;                      //     Add to current range number
+            elfPairArray[arrayPosition] += static_cast<int> ( *it );//     ^
+        }
+        else                                                        //   If current char is not a number (e.g., - or ,)
+            arrayPosition++;                                        //     Go to next range number
+    }
+    
+    int elf1Start = elfPairArray[0];    // Explicitely seperate range numbers
+    int elf1End   = elfPairArray[1];    // ^
+    int elf2Start = elfPairArray[2];    // ^
+    int elf2End   = elfPairArray[3];    // ^
+    
+    if ( elf1Start <= elf2Start && elf1End >= elf2End ) // If elf1's range fully overlaps elf2's
+        return true;                                    //   Return true
+    if ( elf2Start <= elf1Start && elf2End >= elf1End ) // If elf1's range fully overlaps elf2's
+        return true;                                    //   Return true
+                                                        // Else
+    return false;                                       //   Return false
+}
+
+bool isPartialOverlap ( string elfPair ) {
+    // Elf Pair Format
+    //   #-#,#-#
+    //   | | | |
+    //   | | | elf2End
+    //   | | elf2Start
+    //   | elf1End
+    //   elf1Start
+    
+    int elfPairArray[4]{};  // For seperating range numbers
+    int arrayPosition{};    // ^
+    
+    for ( auto it = elfPair.begin(); it != elfPair.end(); it++ ) {  // Read each char
+        if ( *it >= '0' && *it <= '9' ) {                           //   If current char is a number
+            elfPairArray[arrayPosition] *= 10;                      //     Add to current range number
+            elfPairArray[arrayPosition] += static_cast<int> ( *it );//     ^
+        }
+        else                                                        //   If current char is not a number (e.g., - or ,)
+            arrayPosition++;                                        //     Go to next range number
+    }
+    
+    int elf1Start = elfPairArray[0];    // Explicitely seperate range numbers
+    int elf1End   = elfPairArray[1];    // ^
+    int elf2Start = elfPairArray[2];    // ^
+    int elf2End   = elfPairArray[3];    // ^
+    
+    if ( elf2Start <= elf1Start && elf1Start <= elf2End )   // If elf1's start is within elf2's range
+        return true;                                        //   Return true
+    if ( elf1Start <= elf2Start && elf2Start <= elf1End )   // If elf2's start is within elf1's range
+        return true;                                        //   Return true
+                                                            // Else
+    return false;                                           //   Return false
+}
+
+int main()
+{
+    ifstream inputFile;                     // Open input file
+    inputFile.open ( "day_4_input.txt" );
+    if ( inputFile.fail() ) {
+        cout << "Could not open file.";
+        return 0;
+    }
+    
+    int part1Answer{};
+    int part2Answer{};
+    string elfPair{};
+    
+    while ( inputFile >> elfPair ) {                    // >> returns false at end of file
+        part1Answer += isFullOverlap ( elfPair );
+        part2Answer += isPartialOverlap ( elfPair );
+    }
+    
+    cout << "Part 1 Answer = " << part1Answer << endl;
+    cout << "Part 2 Answer = " << part2Answer << endl;
+    
+    return 0;
+}

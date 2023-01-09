@@ -1,0 +1,89 @@
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
+char findDuplicate ( string rucksack1 ) {
+    string rucksack2{};
+    
+    rucksack2 = rucksack1.substr ( rucksack1.length() / 2 );            // Split rucksack into halves
+    rucksack1.resize ( rucksack1.length() / 2 );                        // ^
+    
+    char duplicate{};
+    
+    for ( auto it = rucksack1.begin(); it != rucksack1.end(); it++ ) {  // Go through first half
+        int duplicatePos = rucksack2.find ( *it );                      // Check if current char is also in second half
+        if ( duplicatePos != -1 ) {                                     // If so
+            return *it;                                                 // Return shared char
+        }
+    }
+    
+    return '?';     // If something went wrong
+}
+
+char findDuplicate ( string rucksack1, string rucksack2, string rucksack3 ) {
+    
+    for ( auto it = rucksack1.begin(); it != rucksack1.end(); it++ ) {          // Go through rucksack1
+        int duplicatePos2 = rucksack2.find ( *it );                             // Check if current char is in rucksack2 and 3
+        int duplicatePos3 = rucksack3.find ( *it );                             // ^
+        if ( duplicatePos2 != string::npos && duplicatePos3 != string::npos )   // If so
+            return *it;                                                         // Return shared char
+    }
+    
+    return '?';    // If something went wrong
+}
+
+int calcPriority ( char duplicate ) {
+    // Priority Values
+    //   a:z = 1:26
+    //   A:Z = 27:57
+    // ASCII Values
+    //   A:Z = 65:90
+    //   a:z = 97:122
+    
+    // if duplicate > 90, than it is a:z, else it must be A:Z
+    //   -96 from a:z to get 1:26, -38 from A:Z to get 27:57
+    return ( duplicate > 90 ) ? duplicate - 96 : duplicate - 38;
+}
+
+int main()
+{
+    ifstream inputFile;                 // Open input file
+    inputFile.open ( "day_3_input.txt" );
+    if ( inputFile.fail() ) {
+        cout << "Could not open file.";
+        return 0;
+    }
+    
+    int prioritySum1{};
+    int prioritySum2{};
+    string rucksack1{};
+    string rucksack2{};
+    string rucksack3{};
+    char duplicate{};
+    char badge{};
+    
+    while ( inputFile >> rucksack1 ) {   // >> returns false at end of file
+        inputFile >> rucksack2;
+        inputFile >> rucksack3;
+        
+        // Part 1
+        
+        duplicate = findDuplicate ( rucksack1 );
+        prioritySum1 += calcPriority ( duplicate );
+        duplicate = findDuplicate ( rucksack2 );
+        prioritySum1 += calcPriority ( duplicate );
+        duplicate = findDuplicate ( rucksack3 );
+        prioritySum1 += calcPriority ( duplicate );
+        
+        // Part 2
+        
+        badge = findDuplicate ( rucksack1, rucksack2, rucksack3 );
+        prioritySum2 += calcPriority ( badge );
+    }
+    
+    cout << "Part 1 Answer = " << prioritySum1 << endl;
+    cout << "Part 2 Answer = " << prioritySum2 << endl;
+    
+    return 0;
+}

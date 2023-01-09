@@ -1,0 +1,83 @@
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
+char calcUserHand(char opntHand, char result) {
+    char userHand{};
+    if ( result == 'Y' )            // Draw
+            userHand = opntHand;            // Same hand
+    else if ( result == 'X' )       // Lose
+        if ( opntHand == 'A' )          // Rock
+            userHand = 'C';                 // Scissors
+        else if ( opntHand == 'B' )     // Paper
+            userHand = 'A';                 // Rock
+        else                            // Scissors
+            userHand = 'B';                 // Paper
+    else if ( result == 'Z' )       // Win
+        if ( opntHand == 'A' )          // Rock
+            userHand = 'B';                 // Paper
+        else if ( opntHand == 'B' )     // Paper
+            userHand = 'C';                 // Scissors
+        else                            // Scissors
+            userHand = 'A';                 // Rock
+    else                            // Error occured
+            userHand = 'D';
+    
+    return userHand;
+}
+
+int calcScore(char opntHand, char userHand) {
+    int score{};
+    score += userHand - 64 ;            // -64 to make chars ABC become ints 123
+    
+    if ( userHand == opntHand )         // Same hand
+            score += 3;                    // Draw
+    else if ( userHand == 'A' )         // Rock
+        if ( opntHand == 'C' )              // Scissors
+            score += 6;                         // Win
+        else                                // Paper
+            score += 0;                         // Lose
+    else if ( userHand == 'B' )         // Paper
+        if ( opntHand == 'A' )              // Rock
+            score += 6;                         // Win
+        else                                // Scissors
+            score += 0;                         // Lose
+    else if ( userHand == 'C' )         // Scissors
+        if ( opntHand == 'B' )              // Paper
+            score += 6;                         // Win
+        else                                // Rock
+            score += 0;                         // Lose
+    else                                // Error occured
+            score += -1;
+    
+    return score;
+}
+
+int main()
+{
+    ifstream inputFile;                     // To read in file
+    inputFile.open ( "day_2_input.txt" );
+    if ( inputFile.fail() ) {
+        cout << "Could not open file.";
+        return 0;
+    }
+    
+    char opntHand{};
+    char col2{};
+    char userHand{};
+    int totalScorePart1{};
+    int totalScorePart2{};
+    
+    while ( inputFile >> opntHand ) {       // >> returns false at end of file
+        inputFile >> col2;
+        userHand = calcUserHand(opntHand, col2);
+        totalScorePart1 += calcScore(opntHand, col2 - 23);
+        totalScorePart2 += calcScore(opntHand, userHand);
+    }
+    
+    cout << "Total Score Part 1: " << totalScorePart1 << endl
+         << "Total Score Part 2: " << totalScorePart2 << endl;
+    
+    return 0;
+}

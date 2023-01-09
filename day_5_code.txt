@@ -1,0 +1,33 @@
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
+void moveCrates ( char* crates, string instruction ) {
+    
+}
+
+int main()
+{
+    ifstream inputFile;                     // Open input file
+    inputFile.open ( "test_input.txt" );
+    if ( inputFile.fail() ) {
+        cout << "Could not open file.";
+        return 0;
+    }
+    
+    string part1Answer{};
+    string part2Answer{};
+    
+    char crates[3][3] { {'-','D','-'}, {'N','C','-'}, {'Z','M','P'} };
+    string instruction{};
+    
+    while ( inputFile >> instruction ) {    // >> returns false at end of file
+        moveCrates ( *crates, instruction );
+    }
+    
+    cout << "Part 1 Answer = " << part1Answer << endl;
+    cout << "Part 2 Answer = " << part2Answer << endl;
+    
+    return 0;
+}

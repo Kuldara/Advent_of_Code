@@ -1,0 +1,53 @@
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
+int main()
+{
+    ifstream inputFile;                 //To read in file
+    inputFile.open ( "day_1_input.txt" );
+    if ( inputFile.fail() ) {
+        cout << "Could not open file.";
+        return 0;
+    }
+    
+    int cal_max1{};
+    int cal_max2{};
+    int cal_max3{};
+    
+    while ( !inputFile.eof() ) {        //Go through whole file
+        
+        int cal_elf{};
+        int cal_snack{};
+        string line{};
+        
+        getline ( inputFile, line );
+        while ( !line.empty() ) {       //Sum calories for current elf
+            
+            cal_snack = stoi ( line );
+            cal_elf += cal_snack;
+            getline ( inputFile, line );
+        }
+        
+        if ( cal_elf > cal_max1 ) {      //Rank maxes
+            cal_max3 = cal_max2;
+            cal_max2 = cal_max1;
+            cal_max1 = cal_elf;
+        }
+        else if ( cal_elf > cal_max2 ) {
+            cal_max3 = cal_max2;
+            cal_max2 = cal_elf;
+        }
+        else if ( cal_elf > cal_max3 ) {
+            cal_max3 = cal_elf;
+        }
+    }
+    
+    cout << "cal_max1: " << cal_max1 << endl;
+    cout << "cal_max2: " << cal_max2 << endl;
+    cout << "cal_max3: " << cal_max3 << endl;
+    cout << "top 3 sum = " << cal_max1+cal_max2+cal_max3 << endl;
+
+    return 0;
+}

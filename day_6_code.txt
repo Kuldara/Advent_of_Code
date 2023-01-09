@@ -1,0 +1,64 @@
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
+string processInput ( string input ) {
+    
+    ifstream inputFile;
+    inputFile.open ( input );
+    if ( inputFile.fail() ) {
+        cout << "Could not open file.";
+        exit(1);
+    }
+    
+    string str;
+    inputFile >> str;
+    return str;
+}
+
+int part1and2 ( string input, int numOfDistinctChars ) {
+    
+    bool thereIsADup{};
+    
+    for ( auto it = input.begin(); it < input.end(); it++ ) {
+        
+        for ( int i{}; i < numOfDistinctChars - 1; i++ ) {
+            
+            for ( int j = i + 1; j < numOfDistinctChars; j++ ) {
+                
+                if ( *(it + i) == *(it + j) )
+                    thereIsADup = true;
+                    
+                if ( thereIsADup )
+                    break;
+            }
+            
+            if ( thereIsADup )
+                break;
+        }
+        
+        if ( !thereIsADup )
+            return distance ( input.begin(), it+numOfDistinctChars );
+        
+        thereIsADup = false;
+    }
+    
+    return -1;
+}
+
+int main()
+{
+    string input{};
+    int part1Answer{};
+    int part2Answer{};
+    
+    input = processInput ( "day_6_input.txt" );
+    part1Answer = part1and2 ( input, 4 );
+    part2Answer = part1and2 ( input, 14 );
+    
+    cout << "Part 1 Answer = " << part1Answer << endl;
+    cout << "Part 2 Answer = " << part2Answer << endl;
+    
+    return 0;
+}

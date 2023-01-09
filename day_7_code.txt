@@ -1,0 +1,68 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+
+using namespace std;
+
+class dir;
+class file;
+string processInput();
+int part1();
+
+class dir {
+    public:
+        dir ( string name );
+        string name;
+        dir* parent;
+        vector<dir*> subDirs;
+        vector<file*> files;
+};
+
+dir::dir ( string name ) {
+    this->name = name;
+    this->parent = nullptr;
+    this->subDirs = {};
+    this->files = {};
+}
+
+class file {
+    public:
+        file ( string name, int size );
+        string name;
+        int size;
+};
+
+file::file ( string name, int size ) {
+    this->name = name;
+    this->size = size;
+}
+
+dir* processInput ( string inputFileName ) {
+    ifstream inputFile;
+    inputFile.open ( inputFileName );
+    if ( inputFile.fail() ) {
+        cout << "Could not open file.";
+        exit(1);
+    }
+    
+    
+}
+
+int part1 () { // Sum the size of directories of size <= 100000
+    return -1;
+}
+
+int main() {
+    dir* root{};
+    int part1Answer{};
+    int part2Answer{};
+    
+    root = processInput ( "test_input.txt" );
+    // part1Answer = part1 ( input );
+    // part2Answer = part2 ( input );
+    
+    cout << "Part 1 Answer = " << part1Answer << endl;
+    cout << "Part 2 Answer = " << part2Answer << endl;
+    
+    return 0;
+}
